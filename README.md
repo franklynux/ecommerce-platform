@@ -2,7 +2,7 @@
 
 A modern, containerized e-commerce platform featuring automated CI/CD with GitHub Actions and deployment to Amazon ECS. This project implements a complete DevOps pipeline for a pet accessories online store, built with React, Node.js, and MongoDB.
 
-[![GitHub Actions CI/CD](https://github.com/franklynux/ecommerce-platform/actions/workflows/deploy.yml/badge.svg)](https://github.com/yourusername/ecommerce-platform/actions/workflows/ci-cd.yml)
+[![GitHub Actions CI/CD](https://github.com/franklynux/ecommerce-platform/actions/workflows/deploy.yml/badge.svg)](https://github.com/franklynux/ecommerce-platform/actions/workflows/deploy.yml)
 [![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](https://www.docker.com/)
 [![AWS ECR](https://img.shields.io/badge/AWS-ECR-orange.svg)](https://aws.amazon.com/ecr/)
 
