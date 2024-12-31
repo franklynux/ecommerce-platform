@@ -1,0 +1,67 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Resources:
+  KeyPairNew:
+    Type: AWS::EC2::KeyPair
+    Properties:
+      KeyName: platform
+
+  NodeJsSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable SSH and HTTP access
+      VpcId: vpc-0b1f9bfeeeaa39f29
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: !FindInMap [IPRange, !Ref AWS::Region, SSH]
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: !FindInMap [IPRange, !Ref AWS::Region, HTTP]
+
+  ServerForWebapp:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t2.micro
+      KeyName: !Ref KeyPairNew
+      ImageId: ami-0866a3c8686eaeeba  # Ubuntu, 24.04 LTS
+      SecurityGroupIds: 
+       - !Ref NodeJsSG
+      UserData: 
+        Fn::Base64: |
+            #!/bin/bash
+            sudo apt-get update -y
+            sudo apt-get install -y gcc-c++ make
+            curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+            sudo apt-get install -y nodejs
+            cd /home/ubuntu
+            git clone https://github.com/franklynux/node-js-app.git
+            cd node-js-app
+            npm install
+            npm run build
+            npm start
+
+      
+
+Mappings:
+  IPRange:
+    us-east-1:
+      SSH: 0.0.0.0/0
+      HTTP: 0.0.0.0/0
+    us-west-2:
+      SSH: 0.0.0.0/0
+      HTTP: 0.0.0.0/0
+    # Add more regions as needed
+
+Outputs:
+  InstanceId:
+    Description: The Instance ID
+    Value: !Ref ServerForWebapp
+  PublicIP:
+    Description: Public IP of our instance
+    Value: !GetAtt ServerForNodeJs.PublicIp
+  PublicDNS:
+    Description: Public DNS of our instance
+    Value: !GetAtt ServerForNodeJs.PublicDnsName

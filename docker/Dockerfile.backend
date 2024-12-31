@@ -1,0 +1,37 @@
+FROM node:18-alpine
+
+# Add necessary build tools
+RUN apk add --no-cache \
+    python3 \
+    make \
+    g++ \
+    curl
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+COPY backend/package*.json ./backend/
+
+# Install dependencies
+RUN npm ci --production
+
+# Copy backend source
+COPY backend/ ./backend/
+
+WORKDIR /app/backend
+
+# Set correct permissions
+RUN chown -R node:node /app
+USER node
+
+# Environment configuration
+ENV NODE_ENV=production \
+    PORT=5000
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
+    CMD curl -f http://localhost:5000/api/health || exit 1
+
+EXPOSE 5000
+
+CMD ["node", "src/index.js"]

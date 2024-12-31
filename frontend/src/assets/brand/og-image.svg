@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#2563EB"/>
+            <stop offset="100%" style="stop-color:#1D4ED8"/>
+        </linearGradient>
+    </defs>
+    
+    <!-- Background -->
+    <rect width="1200" height="630" fill="url(#bgGradient)"/>
+    
+    <!-- Logo -->
+    <g transform="translate(150, 165)">
+        <circle cx="150" cy="150" r="120" fill="white"/>
+        
+        <!-- Paw Print -->
+        <g transform="translate(60, 60) scale(1.8)" fill="url(#bgGradient)">
+            <circle cx="25" cy="30" r="15"/>
+            <circle cx="15" cy="15" r="8"/>
+            <circle cx="35" cy="15" r="8"/>
+            <circle cx="10" cy="30" r="8"/>
+            <circle cx="40" cy="30" r="8"/>
+        </g>
+    </g>
+    
+    <!-- Text -->
+    <g fill="white" font-family="Inter, system-ui, sans-serif">
+        <text x="400" y="280" font-size="72" font-weight="700">Pet Accessories</text>
+        <text x="400" y="350" font-size="36" font-weight="500" opacity="0.9">Your One-Stop Shop for Pet Supplies</text>
+    </g>
+</svg>
