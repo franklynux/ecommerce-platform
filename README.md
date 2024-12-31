@@ -1,6 +1,6 @@
-# Pet Accessories E-commerce Platform with AWS ECS Deployment
+# E-commerce Platform with GitHub Actions and deployment to Amazon ECS
 
-A modern, containerized e-commerce platform featuring automated CI/CD with GitHub Actions and deployment to Amazon ECS. This project implements a complete DevOps pipeline for a pet accessories online store, built with React, Node.js, and MongoDB.
+A modern, containerized Pet Accessories E-commerce platform featuring automated CI/CD with GitHub Actions and deployment to Amazon ECS. This project implements a complete DevOps pipeline for a pet accessories online store, built with React, Node.js, and MongoDB.
 
 [![GitHub Actions CI/CD](https://github.com/franklynux/ecommerce-platform/actions/workflows/deploy.yml/badge.svg)](https://github.com/franklynux/ecommerce-platform/actions/workflows/deploy.yml)
 [![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](https://www.docker.com/)
@@ -8,7 +8,7 @@ A modern, containerized e-commerce platform featuring automated CI/CD with GitHu
 
 ## Table of Contents
 
-- [Pet Accessories E-commerce Platform with AWS ECS Deployment](#pet-accessories-e-commerce-platform-with-aws-ecs-deployment)
+- [E-commerce Platform with GitHub Actions and deployment to Amazon ECS](#e-commerce-platform-with-github-actions-and-deployment-to-amazon-ecs)
   - [Table of Contents](#table-of-contents)
   - [Introduction](#introduction)
   - [Architecture Overview](#architecture-overview)
@@ -197,7 +197,7 @@ Follow these steps to set up the local development environment:
    ![ECS task definition JSON](./images/ECS%20console%20creae%20new%20ask%20definiion.png)
 3. Enter a **Task Definition Name**: `my-app`.
 4. Set the **Task size** (memory and CPU) according to your application needs.
-5. In the **Container definitions** section, click on **Add container**.
+**Note:** The task definition would contain configurations for both the **frontend** and **backend** containers.
 
 **Task Definition configuration in JSON (below):**
 
@@ -801,7 +801,7 @@ env:
    aws logs get-log-events \
      --log-group-name /ecs/my-app \
      --log-stream-name $(aws logs describe-log-streams \
-     --log-group-name /ecs/frontend \
+     --log-group-name /ecs/my-app \
      --order-by LastEventTime \
      --descending --limit 1 \
      --query 'logStreams[0].logStreamName' \
