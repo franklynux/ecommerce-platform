@@ -50,6 +50,7 @@ A modern, containerized Pet Accessories E-commerce platform featuring automated 
   - [Contributing](#contributing)
   - [License](#license)
   - [Getting Help](#getting-help)
+  - [Author](#author)
 
 ## Introduction
 
@@ -1028,3 +1029,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Getting Help
 
 If you encounter any issues or have questions, please open an issue in the GitHub repository or contact me for assistance.
+
+## Author
+
+[franklynux](https://github.com/franklynux)
