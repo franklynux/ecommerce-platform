@@ -51,8 +51,6 @@ const App = () => {
               </ProtectedContent>
             } />
           </Routes>
-        </Layout>
-
       <Toaster 
         position="bottom-right"
         toastOptions={{
