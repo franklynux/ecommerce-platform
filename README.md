@@ -344,30 +344,8 @@ The `.github/workflows/deploy.yml` workflow handles:
 3. Pushing to ECR
 4. Deploying to ECS
 
-### Environment Setup
-
-```yaml
-env:
-  AWS_REGION: us-east-1
-  ECR_REPOSITORY_FRONTEND: projects/pet-accessories-frontend
-  ECR_REPOSITORY_BACKEND: projects/pet-accessories-backend
-  ECS_CLUSTER: myAppCluster
-  ECS_SERVICE: ecommerce-webapp
-```
-
-### Build and Push Process
-
-```yaml
-- name: Build and push images
-  env:
-    ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-    IMAGE_TAG: ${{ github.sha }}
-  run: |
-    docker build -f docker/Dockerfile.frontend -t $ECR_REGISTRY/$ECR_REPOSITORY_FRONTEND:$IMAGE_TAG .
-    docker build -f docker/Dockerfile.backend -t $ECR_REGISTRY/$ECR_REPOSITORY_BACKEND:$IMAGE_TAG .
-    docker push $ECR_REGISTRY/$ECR_REPOSITORY_FRONTEND:$IMAGE_TAG
-    docker push $ECR_REGISTRY/$ECR_REPOSITORY_BACKEND:$IMAGE_TAG
-```
+For full details on the environment variables and the exact steps used to build, tag, and push images to ECR, please refer directly to the workflow file:
+📄 **[View the deployment workflow](.github/workflows/deploy.yml)**
 
 ## Security Implementation
 
