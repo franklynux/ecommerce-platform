@@ -276,43 +276,7 @@ To create private repositories for the backend and frontend container images, fo
        - Repositories Created:
        ![ECR repos ready](./images/ECR%20repos%20read.png)
 
-   **Note:** Ensure to note the repositories URLs.
-
-2. **Tag the Images**:
-   - After building your images, tag them with the repository URI:
-
-     ```bash
-     # For Docker Hub
-     docker tag ecommerce-frontend:latest yourusername/pet-accessories-frontend:latest
-     docker tag ecommerce-backend:latest yourusername/pet-accessories-backend:latest
-
-     # For AWS ECR
-     docker tag pet-accessories-frontend:latest <ECR_URI>/pet-accessories-frontend:latest
-     docker tag pet-accessories-backend:latest <ECR_URI>/pet-accessories-backend:latest
-     ```
-
-3. **Push the Images to the Private Repository**:
-   - Log in to your Docker Hub or AWS ECR:
-
-     ```bash
-     # For Docker Hub
-     docker login
-
-     # For AWS ECR
-     aws ecr get-login-password --region <your-region> | docker login --username AWS --password-stdin <ECR_URI>
-     ```
-
-   - Push the images:
-
-     ```bash
-     # For Docker Hub
-     docker push franklynux/ecommerce-frontend:latest
-     docker push franklynux/ecommerce-backend:latest
-
-     # For AWS ECR
-     docker push <ECR_URI>/ecommerce-frontend:latest
-     docker push <ECR_URI>/ecommerce-backend:latest
-     ```
+   **Note:** Ensure to note the repository URIs. You will need them for the GitHub Actions workflow, but the workflow itself will handle all the tagging and pushing automatically!
 
 ## Setting Up GitHub Secrets
 
