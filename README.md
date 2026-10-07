@@ -380,118 +380,15 @@ To run the application, you need to create Dockerfiles to build docker images fo
 
 ### Backend Docker Configuration
 
-```dockerfile
-# Build stage
-FROM node:18-alpine as build
-
-# Add necessary build tools
-RUN apk add --no-cache \
-    python3 \
-    make \
-    g++
-
-WORKDIR /app
-
-# Copy package files
-COPY package*.json ./
-COPY backend/package*.json ./backend/
-
-# Install dependencies
-RUN npm ci --production
-
-# Copy backend source
-COPY backend/ ./backend/
-
-# Production stage
-FROM node:18-alpine
-
-# Add curl for healthcheck
-RUN apk add --no-cache curl
-
-WORKDIR /app
-
-# Copy built artifacts from build stage
-COPY --from=build --chown=node:node /app/node_modules ./node_modules
-COPY --from=build --chown=node:node /app/package*.json ./
-COPY --from=build --chown=node:node /app/backend ./backend
-
-WORKDIR /app/backend
-
-USER node
-
-# Environment configuration
-ENV NODE_ENV=production \
-    PORT=5000
-
-HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
-    CMD curl -f http://localhost:5000/api/health || exit 1
-
-EXPOSE 5000
-
-CMD ["node", "src/index.js"]
-```
+The backend uses a multi-stage Docker build to optimize image size and runs as an unprivileged user for security. 
+📄 **[View the Backend Dockerfile](docker/Dockerfile.backend)**
 
 ![docker backend](./images/docker%20backend.png)
 
 ### Frontend Docker Configuration
 
-```dockerfile
-FROM node:18-alpine as build
-
-WORKDIR /app
-COPY package*.json ./
-COPY frontend/package*.json ./frontend/
-RUN npm ci
-COPY frontend ./frontend
-WORKDIR /app/frontend
-RUN npm run build
-
-FROM nginx:alpine
-
-# Install necessary utilities
-RUN apk add --no-cache curl
-
-# Create necessary directories with proper permissions
-RUN mkdir -p /var/cache/nginx \
-             /var/log/nginx \
-             /var/run/nginx \
-             /tmp/nginx/client_temp \
-             /tmp/nginx/proxy_temp \
-             /tmp/nginx/fastcgi_temp \
-             /tmp/nginx/uwsgi_temp \
-             /tmp/nginx/scgi_temp \
-             /usr/share/nginx/html \
-    && addgroup -S nginx 2>/dev/null || true \
-    && adduser -S -G nginx -H -D nginx 2>/dev/null || true \
-    && chown -R nginx:nginx /var/cache/nginx \
-    && chown -R nginx:nginx /var/log/nginx \
-    && chown -R nginx:nginx /var/run/nginx \
-    && chown -R nginx:nginx /tmp/nginx \
-    && chown -R nginx:nginx /usr/share/nginx/html \
-    && chmod -R 755 /var/cache/nginx \
-    && chmod -R 755 /var/log/nginx \
-    && chmod -R 755 /var/run/nginx \
-    && chmod -R 755 /tmp/nginx
-
-# Copy built assets and configuration
-COPY --from=build /app/frontend/dist /usr/share/nginx/html
-COPY docker/nginx.conf /etc/nginx/nginx.conf
-COPY docker/default.conf /etc/nginx/conf.d/default.conf
-
-# Set up health check file
-RUN echo "OK" > /usr/share/nginx/html/health.txt \
-    && chown nginx:nginx /usr/share/nginx/html/health.txt \
-    && chmod 644 /usr/share/nginx/html/health.txt
-
-USER nginx
-
-EXPOSE 8080
-
-HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
-    CMD curl -f http://localhost:8080/health.txt || exit 1
-
-CMD ["nginx", "-g", "daemon off;"]
-```
+The frontend uses a multi-stage build to compile the React application and serves the static assets using a hardened, unprivileged Nginx container.
+📄 **[View the Frontend Dockerfile](docker/Dockerfile.frontend)**
 
 ![docker frontend](./images/docker%20fronend.png)
 
