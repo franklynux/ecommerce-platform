@@ -12,7 +12,6 @@ env:
   ECR_REPOSITORY_FRONTEND: projects/pet-accessories-frontend  
   ECS_SERVICE: ecommerce-webapp
   ECS_CLUSTER: myAppCluster
-  AWS_ACCOUNT_ID: '014498645423'
   ECS_TASK_DEFINITION: .aws/task-definition.json
 
 jobs:
