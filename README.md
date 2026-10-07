@@ -208,7 +208,7 @@ Follow these steps to set up the local development environment:
     "containerDefinitions": [
         {
             "name": "backend",
-            "image": "014498645423.dkr.ecr.us-east-1.amazonaws.com/projects/pet-accessories-backend",
+            "image": "<YOUR_AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/projects/pet-accessories-backend",
             "cpu": 1024,
             "memory": 3072,
             "memoryReservation": 2048,
@@ -229,7 +229,7 @@ Follow these steps to set up the local development environment:
                 },
                 {
                     "name": "MONGODB_URI",
-                    "value": "mongodb+srv://franklynux:admin123@testcluster.40akg.mongodb.net/pet-accessories"
+                    "value": "mongodb+srv://<username>:<password>@<cluster-url>/pet-accessories"
                 },
                 {
                     "name": "NODE_ENV",
@@ -263,7 +263,7 @@ Follow these steps to set up the local development environment:
         },
         {
             "name": "frontend",
-            "image": "014498645423.dkr.ecr.us-east-1.amazonaws.com/projects/pet-accessories-frontend:991b3b666effebb71d3a05e110dbe2865b701645",
+            "image": "<YOUR_AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/projects/pet-accessories-frontend:991b3b666effebb71d3a05e110dbe2865b701645",
             "cpu": 1024,
             "memory": 2048,
             "portMappings": [
@@ -327,8 +327,8 @@ Follow these steps to set up the local development environment:
             "systemControls": []
         }
     ],
-    "taskRoleArn": "arn:aws:iam::014498645423:role/ecsTaskRole",
-    "executionRoleArn": "arn:aws:iam::014498645423:role/ecsTaskExecutionRole",
+    "taskRoleArn": "arn:aws:iam::<YOUR_AWS_ACCOUNT_ID>:role/ecsTaskRole",
+    "executionRoleArn": "arn:aws:iam::<YOUR_AWS_ACCOUNT_ID>:role/ecsTaskExecutionRole",
     "networkMode": "awsvpc",
     "volumes": [],
     "placementConstraints": [],
@@ -659,7 +659,7 @@ env:
              "logs:CreateLogStream",
              "logs:PutLogEvents"
            ],
-           "Resource": "arn:aws:logs:us-east-1:014498645423:log-group:/ecs/ecommerce-webapp:log-stream:"
+           "Resource": "arn:aws:logs:us-east-1:<YOUR_AWS_ACCOUNT_ID>:log-group:/ecs/ecommerce-webapp:log-stream:"
          }
        ]
      }
