@@ -137,6 +137,7 @@ jobs:
         image: ${{ env.FRONTEND_IMAGE }}
 
     - name: Update backend container in task definition
+      id: task-def-backend
       uses: aws-actions/amazon-ecs-render-task-definition@v1
       with:
         task-definition: ${{ steps.task-def.outputs.task-definition }}
@@ -146,7 +147,7 @@ jobs:
     - name: Deploy to Amazon ECS
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
       with:
-        task-definition: ${{ steps.task-def.outputs.task-definition }}
+        task-definition: ${{ steps.task-def-backend.outputs.task-definition }}
         service: ${{ env.ECS_SERVICE }}
         cluster: ${{ env.ECS_CLUSTER }}
         wait-for-service-stability: true
