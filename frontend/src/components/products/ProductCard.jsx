@@ -2,12 +2,14 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../../hooks/useCart';
 import { formatCurrency } from '../../utils/formatCurrency';
+import { Card } from '../common/Card';
+import { Button } from '../common/Button';
 
 const ProductCard = ({ product }) => {
   const { addItem } = useCart();
 
   return (
-    <div className="border rounded-lg p-4 shadow-sm" data-testid="product-card">
+    <Card className="p-4" data-testid="product-card">
       <img 
         src={product.imageUrl} 
         alt={product.name}
@@ -20,16 +22,16 @@ const ProductCard = ({ product }) => {
           <span className="text-lg font-bold">
             {formatCurrency(product.price)}
           </span>
-          <button
+          <Button
             onClick={() => addItem(product)}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            variant="primary"
             aria-label="Add to cart"
           >
             Add to Cart
-          </button>
+          </Button>
         </div>
       </div>
-    </div>
+    </Card>
   );
 };
 

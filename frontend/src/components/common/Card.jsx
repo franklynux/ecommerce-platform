@@ -1,7 +1,7 @@
 export const Card = ({ children, className = "", ...props }) => {
     return (
       <div 
-        className={`bg-white rounded-lg shadow-md overflow-hidden ${className}`} 
+        className={`card ${className}`} 
         {...props}
       >
         {children}

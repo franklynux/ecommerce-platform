@@ -4,6 +4,8 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import productRoutes from './routes/products.js';
 import orderRoutes from './routes/orders.js';
+import authRoutes from './routes/auth.js';
+import paymentRoutes from './routes/payments.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import { apiLimiter, authLimiter } from './middleware/rateLimiter.js';
 import configureSecurityMiddleware from './middleware/security.js';
@@ -25,6 +27,8 @@ app.use('/api/auth/', authLimiter);
 // Routes
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/payments', paymentRoutes);
 
 // Basic test route
 app.get('/', (req, res) => {

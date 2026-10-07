@@ -45,9 +45,11 @@ RUN echo "OK" > /usr/share/nginx/html/health.txt \
     && chown nginx:nginx /usr/share/nginx/html/health.txt \
     && chmod 644 /usr/share/nginx/html/health.txt
 
-EXPOSE 80
+USER nginx
+
+EXPOSE 8080
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
-    CMD curl -f http://localhost:80/health.txt || exit 1
+    CMD curl -f http://localhost:8080/health.txt || exit 1
 
 CMD ["nginx", "-g", "daemon off;"]

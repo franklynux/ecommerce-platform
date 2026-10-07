@@ -102,7 +102,7 @@ ecommerce-platform/
 │   ├── src/
 │   │   ├── app.js                # Main application file
 │   │   ├── index.js              # Entry point
-│   │   ├── controllers/          # Business logic
+│   │   ├── controllers/          # Business logic (e.g. authController.js)
 │   │   ├── middleware/           # Middleware functions
 │   │   ├── models/               # Database models
 │   │   └── routes/               # API routes
@@ -379,19 +379,19 @@ To run the application, you need to create Dockerfiles to build docker images fo
 ### Backend Docker Configuration
 
 ```dockerfile
-FROM node:18-alpine
+# Build stage
+FROM node:18-alpine as build
 
 # Add necessary build tools
 RUN apk add --no-cache \
     python3 \
     make \
-    g++ \
-    curl
+    g++
 
 WORKDIR /app
 
 # Copy package files
-COPY package*.json ./ 
+COPY package*.json ./
 COPY backend/package*.json ./backend/
 
 # Install dependencies
@@ -400,10 +400,21 @@ RUN npm ci --production
 # Copy backend source
 COPY backend/ ./backend/
 
+# Production stage
+FROM node:18-alpine
+
+# Add curl for healthcheck
+RUN apk add --no-cache curl
+
+WORKDIR /app
+
+# Copy built artifacts from build stage
+COPY --from=build --chown=node:node /app/node_modules ./node_modules
+COPY --from=build --chown=node:node /app/package*.json ./
+COPY --from=build --chown=node:node /app/backend ./backend
+
 WORKDIR /app/backend
 
-# Set correct permissions
-RUN chown -R node:node /app
 USER node
 
 # Environment configuration
@@ -470,10 +481,12 @@ RUN echo "OK" > /usr/share/nginx/html/health.txt \
     && chown nginx:nginx /usr/share/nginx/html/health.txt \
     && chmod 644 /usr/share/nginx/html/health.txt
 
-EXPOSE 80
+USER nginx
+
+EXPOSE 8080
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
-    CMD curl -f http://localhost:80/health.txt || exit 1
+    CMD curl -f http://localhost:8080/health.txt || exit 1
 
 CMD ["nginx", "-g", "daemon off;"]
 ```

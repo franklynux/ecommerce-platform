@@ -1,8 +1,7 @@
 // src/App.jsx
 import React, { useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { CartProvider } from './contexts/CartContext';
-import { AuthProvider, ProtectedContent, GuestContent } from './contexts/AuthContext';
+import { ProtectedContent, GuestContent } from './contexts/AuthContext';
 import Layout from './components/layout/Layout';
 import { Toaster } from 'react-hot-toast';
 
@@ -25,10 +24,8 @@ const App = () => {
   }, []);
 
   return (
-    <AuthProvider>
-      <CartProvider>
-        <Layout>
-          <Routes>
+    <Layout>
+      <Routes>
             {/* Public Routes */}
             <Route path="/" element={<Home />} />
             <Route path="/products" element={<ProductList />} />
@@ -56,30 +53,28 @@ const App = () => {
           </Routes>
         </Layout>
 
-        {/* Toast notifications */}
-        <Toaster 
-          position="bottom-right"
-          toastOptions={{
+      <Toaster 
+        position="bottom-right"
+        toastOptions={{
+          style: {
+            background: '#333',
+            color: '#fff',
+          },
+          success: {
+            duration: 3000,
             style: {
-              background: '#333',
-              color: '#fff',
+              background: '#4F46E5',
             },
-            success: {
-              duration: 3000,
-              style: {
-                background: '#4F46E5',
-              },
+          },
+          error: {
+            duration: 3000,
+            style: {
+              background: '#EF4444',
             },
-            error: {
-              duration: 3000,
-              style: {
-                background: '#EF4444',
-              },
-            },
-          }}
-        />
-      </CartProvider>
-    </AuthProvider>
+          },
+        }}
+      />
+    </Layout>
   );
 };
 

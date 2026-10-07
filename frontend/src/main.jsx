@@ -24,7 +24,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <AuthProvider>
-          <App />
+          <CartProvider>
+            <App />
+          </CartProvider>
         </AuthProvider>
       </BrowserRouter>
     </QueryClientProvider>

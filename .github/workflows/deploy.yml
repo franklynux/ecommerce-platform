@@ -26,10 +26,10 @@ jobs:
           - 27017:27017
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '18'
           cache: 'npm'
@@ -51,10 +51,10 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '18'
           cache: 'npm'
@@ -69,6 +69,10 @@ jobs:
         run: npm test
         env:
           CI: true
+          
+      - name: Build Frontend
+        working-directory: frontend
+        run: npm run build
 
   deploy:
     needs: [test-backend, test-frontend]
@@ -77,7 +81,7 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v2
@@ -108,7 +112,6 @@ jobs:
         # Build Backend with environment variables
         docker build \
           --build-arg NODE_ENV=${{ env.NODE_ENV }} \
-          --build-arg MONGODB_URI=${{ secrets.MONGODB_URI }} \
           -t $ECR_REGISTRY/$ECR_REPOSITORY_BACKEND:$IMAGE_TAG \
           -t $ECR_REGISTRY/$ECR_REPOSITORY_BACKEND:latest \
           -f docker/Dockerfile.backend .
@@ -178,8 +181,9 @@ jobs:
         wait-for-service-stability: true
             
     - name: Deployment Status
+      if: always()
       run: |
-        if [ $? -eq 0 ]; then
+        if [ "${{ job.status }}" = "success" ]; then
           echo "Deployment completed successfully!"
         else
           echo "Deployment failed!"
