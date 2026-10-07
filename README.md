@@ -374,52 +374,13 @@ env:
 ### IAM Roles and Permissions
 
 1. **ECS Task Role (ecsTaskRole)**:
-   - Permissions for task-level AWS API access
-   - Used for application-specific AWS service access
-   - Required policies:
-
-     ```json
-     {
-       "Version": "2012-10-17",
-       "Statement": [
-         {
-           "Effect": "Allow",
-           "Action": [
-             "ecr:GetAuthorizationToken",
-             "ecr:BatchCheckLayerAvailability",
-             "ecr:GetDownloadUrlForLayer",
-             "ecr:BatchGetImage"
-           ],
-           "Resource": "*"
-         }
-       ]
-     }
-     ```
-
-     **Expected Output:**
-     ![ecstaskrole](./images/IAM%20role%20(ecstaskrole).png)
+   - This role is assumed by the containers themselves to access other AWS services.
+   - Currently, our application does not directly call AWS APIs, so no additional policies are strictly required, but it should be attached to the task.
 
 2. **ECS Task Execution Role (ecsTaskExecutionRole)**:
-   - Permissions for ECS agent
-   - ECR image pull
-   - CloudWatch logs
-   - Required policies:
-
-     ```json
-     {
-       "Version": "2012-10-17",
-       "Statement": [
-         {
-           "Effect": "Allow",
-           "Action": [
-             "logs:CreateLogStream",
-             "logs:PutLogEvents"
-           ],
-           "Resource": "arn:aws:logs:us-east-1:<YOUR_AWS_ACCOUNT_ID>:log-group:/ecs/ecommerce-webapp:log-stream:"
-         }
-       ]
-     }
-     ```
+   - This role is assumed by the ECS agent to pull container images and publish logs on your behalf.
+   - **Required AWS Managed Policy**: `AmazonECSTaskExecutionRolePolicy` (Provides permissions for ECR pulls and CloudWatch logging).
+   - **Custom Permissions needed**: If using AWS Systems Manager Parameter Store for secrets (like `MONGODB_URI`), you must attach an inline policy allowing `ssm:GetParameters` for those specific secrets.
 
      **Expected Output:**
      ![ecstaskExecutionrole](./images/IAM%20role%20(ecstaskExecutionrole).png)
