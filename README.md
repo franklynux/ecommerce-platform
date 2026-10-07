@@ -88,6 +88,8 @@ Below is a consise ***Project Directory Structure Overview***
 ```plaintext
 ecommerce-platform/
 │
+├── .aws/
+│   └── task-definition.json        # ECS Task Definition
 ├── .github/
 │   └── workflows/
 │       └── deploy.yml              # Consolidated workflow file
@@ -564,8 +566,7 @@ To securely store sensitive information, you need to set up GitHub Secrets in yo
 2. Click on "Settings" > "Secrets and variables" > "Actions".
 3. Click on "New repository secret" for each of the following:
 
-   - **AWS_ACCESS_KEY_ID**: Your AWS access key ID.
-   - **AWS_SECRET_ACCESS_KEY**: Your AWS secret access key.
+   *(Note: AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY are no longer required because we use secure IAM OIDC role assumption (`Dev-GitHubActionsRole`) in the `deploy.yml` workflow).*
    - **DOCKER_USERNAME**: Your Docker Hub username.
    - **DOCKER_PASSWORD**: Your Docker Hub password.
    - **JWT_SECRET**: Your JWT secret token.
@@ -596,7 +597,6 @@ env:
   ECR_REPOSITORY_BACKEND: projects/pet-accessories-backend
   ECS_CLUSTER: myAppCluster
   ECS_SERVICE: ecommerce-webapp
-  ECS_TASK_DEFINITION: my-app
 ```
 
 ### Build and Push Process
